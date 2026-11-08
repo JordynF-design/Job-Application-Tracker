@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobTrack | Add Application</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <aside class="sidebar">
+        <div class="logo">Job<span>Track</span></div>
+        <p class="menu-label">MENU</p>
+
+        <nav>
+            <a href="/" class="nav-link">▦ Dashboard</a>
+            <a href="/applications" class="nav-link">Applications</a>
+            <a href="/interviews" class="nav-link">Interviews</a>
+            <a href="/reminders" class="nav-link">Reminders</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="#" class="nav-link">⚙ Settings</a>
+            <p>JobTrack v1.0</p>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1>Add Application</h1>
+                <p>Keep your job search organized.</p>
+            </div>
+        </header>
+
+        <section class="applications-section">
+
+            <h2>Job Information</h2>
+            <p style="color:#88889b; margin:10px 0 25px;">
+                Enter the details of the job you applied for.
+            </p>
+
+            <form action="/add" method="POST">
+
+                <label>Company Name *</label>
+                <input type="text" name="company" placeholder="e.g. Target" required>
+
+                <label>Job Title *</label>
+                <input type="text" name="job_title" placeholder="e.g. Software Engineer" required>
+
+                <label>Location</label>
+                <input type="text" name="location" placeholder="e.g. Florence, SC">
+
+                <label>Date Applied *</label>
+                <input type="date" name="date_applied" required>
+
+                <label>Application Status</label>
+                <select name="status">
+                    <option value="Applied">Applied</option>
+                    <option value="Interview">Interview</option>
+                    <option value="Offer">Offer</option>
+                    <option value="Rejected">Rejected</option>
+                </select>
+
+                <label>Notes</label>
+                <textarea name="notes" rows="5"
+                    placeholder="Add interview details, follow-up dates, or notes..."></textarea>
+
+                <div style="display:flex; gap:12px; margin-top:25px;">
+                    <button type="submit" class="add-button">
+                        Save Application
+                    </button>
+
+                    <a href="/" class="view-button"
+                       style="text-decoration:none;">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+</div>
+
+</body>
+</html>

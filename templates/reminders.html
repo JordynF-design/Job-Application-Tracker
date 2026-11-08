@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobTrack | Reminders</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="app-container">
+
+    <aside class="sidebar">
+        <div class="logo">Job<span>Track</span></div>
+        <p class="menu-label">MENU</p>
+
+        <nav>
+            <a href="/" class="nav-link">▦ Dashboard</a>
+            <a href="/applications" class="nav-link">▣ Applications</a>
+            <a href="/interviews" class="nav-link">▣ Interviews</a>
+            <a href="/reminders" class="nav-link active">◷ Reminders</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="#" class="nav-link">⚙ Settings</a>
+            <p>JobTrack v1.0</p>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1>My Reminders</h1>
+                <p>Stay on top of your job applications and interviews.</p>
+            </div>
+
+            <a href="/add-reminder" class="add-button">
+                + Add Reminder
+            </a>
+        </header>
+
+        <section class="applications-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>All Reminders</h2>
+                    <p>Manage your upcoming tasks and follow-ups.</p>
+                </div>
+            </div>
+
+            {% if reminders %}
+
+                <div class="application-list">
+
+                    {% for reminder in reminders %}
+
+                        <div class="application-row">
+
+                            <div>
+                                <h3>{{ reminder.title }}</h3>
+
+                                <p>
+                                    Due: {{ reminder.reminder_date }}
+                                </p>
+
+                                <p>
+                                    {{ reminder.notes or 'No notes added.' }}
+                                </p>
+                            </div>
+
+                            <div>
+                                {% if reminder.completed == 1 %}
+                                    <span class="status-badge">Completed</span>
+                                {% else %}
+                                    <span class="status-badge">Pending</span>
+                                {% endif %}
+
+                                {% if reminder.completed == 0 %}
+
+                                    <form method="POST"
+                                          action="{{ url_for('complete_reminder', reminder_id=reminder.id) }}">
+                                        <button type="submit">
+                                            Mark Complete
+                                        </button>
+                                    </form>
+
+                                {% endif %}
+
+                                <form method="POST"
+                                      action="{{ url_for('delete_reminder', reminder_id=reminder.id) }}">
+                                    <button type="submit">
+                                        Delete
+                                    </button>
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+                    <h2>No reminders yet</h2>
+                    <p>Your upcoming reminders will appear here.</p>
+                    <a href="/add-reminder" class="add-button">
+                        Create Your First Reminder
+                    </a>
+                </div>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

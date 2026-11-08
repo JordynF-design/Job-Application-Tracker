@@ -1,0 +1,367 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobTrack | Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <aside class="sidebar">
+        <div class="logo">Job<span>Track</span></div>
+
+        <p class="menu-label">MENU</p>
+
+        <nav>
+    <a href="/" class="nav-link active">▦ Dashboard</a>
+    <a href="/applications" class="nav-link">▤ Applications</a>
+    <a href="/interviews" class="nav-link">Interviews</a>
+    <a href="/reminders" class="nav-link">Reminders</a>
+</nav>
+
+        <div class="sidebar-bottom">
+            <a href="#" class="nav-link">⚙ Settings</a>
+            <p>JobTrack v1.0</p>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1>Dashboard</h1>
+                <p>Welcome back! Here's your job search overview.</p>
+            </div>
+
+            <button class="add-button">+ Add Application</button>
+        </header>
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <p>Total Applications</p>
+                <h2>{{ total }}</h2>
+                <span>All applications tracked</span>
+            </div>
+
+            <div class="stat-card">
+                <p>Interviews</p>
+                <h2>{{ interviews }}</h2>
+                <span>Interview opportunities</span>
+            </div>
+
+            <div class="stat-card">
+                <p>Offers</p>
+                <h2>{{ offers }}</h2>
+                <span>Potential opportunities</span>
+            </div>
+
+            <div class="stat-card">
+                <p>Rejected</p>
+                <h2>{{ rejected }}</h2>
+                <span>Applications closed</span>
+            </div>
+
+        </section>
+
+<section class="applications-section">
+    <div class="section-heading">
+        <div>
+            <h2>Application Progress</h2>
+            <p>Track your job search progress at a glance.</p>
+        </div>
+    </div>
+
+    <div class="progress-card">
+        <div class="progress-info">
+        <span>Applications Submitted</span>
+        <strong>{{ total }} / {{ goal }}</strong>
+</div>
+
+        <div class="progress-bar">
+        <div class="progress-fill" style="width: {{ progress }}%;"></div>
+        </div>
+    </div>
+
+
+<p class="progress-remaining">
+    {{ remaining }} applications remaining to reach your goal.
+</p>
+
+
+<section class="applications-section">
+    <div class="section-heading">
+        <div>
+            <h2>Application Status Breakdown</h2>
+            <p>See how your job applications are progressing.</p>
+        </div>
+    </div>
+
+    <div class="status-chart">
+        <div class="status-item">
+            <div class="status-label">
+                <span>Pending</span>
+                <strong>{{ pending }}</strong>
+            </div>
+            <div class="status-track">
+                <div class="status-fill pending-fill"
+                     style="width: {{ (pending / total * 100) if total else 0 }}%"></div>
+            </div>
+        </div>
+
+        <div class="status-item">
+            <div class="status-label">
+                <span>Interviews</span>
+                <strong>{{ interviews }}</strong>
+            </div>
+            <div class="status-track">
+                <div class="status-fill interview-fill"
+                     style="width: {{ (interviews / total * 100) if total else 0 }}%"></div>
+            </div>
+        </div>
+
+        <div class="status-item">
+            <div class="status-label">
+                <span>Offers</span>
+                <strong>{{ offers }}</strong>
+            </div>
+            <div class="status-track">
+                <div class="status-fill offer-fill"
+                     style="width: {{ (offers / total * 100) if total else 0 }}%"></div>
+            </div>
+        </div>
+
+        <div class="status-item">
+            <div class="status-label">
+                <span>Rejected</span>
+                <strong>{{ rejected }}</strong>
+            </div>
+            <div class="status-track">
+                <div class="status-fill rejected-fill"
+                     style="width: {{ (rejected / total * 100) if total else 0 }}%"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<div class="insights-card">
+    <div class="section-heading">
+        <div>
+            <h2>Application Insights</h2>
+            <p>Understand your job search performance.</p>
+        </div>
+    </div>
+
+   <div class="insights-grid">
+
+    <div class="insight-item">
+        <span>Success Rate</span>
+        <strong>{{ "%.1f"|format(success_rate) }}%</strong>
+    </div>
+
+    <div class="insight-item">
+        <span>Response Rate</span>
+        <strong>{{ "%.1f"|format(response_rate) }}%</strong>
+    </div>
+
+    <div class="insight-item">
+        <span>Pending Applications</span>
+        <strong>{{ pending }}</strong>
+    </div>
+
+
+<div class="insight-item">
+    <span>Average Response Time</span>
+    <strong>
+        {% if average_response_time > 0 %}
+            {{ average_response_time }} days
+        {% else %}
+            No data yet
+        {% endif %}
+    </strong>
+</div>
+
+
+</div>
+</div>
+
+
+
+
+</section>
+
+
+        <section class="applications-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Recent Applications</h2>
+                    <p>Keep track of your latest job applications.</p>
+                </div>
+
+                <button class="view-button">View All</button>
+            </div>
+
+           
+{% if applications %}
+    <div class="application-list">
+        {% for application in applications %}
+            <div class="application-row">
+                <div>
+                    <h3>{{ application.company }}</h3>
+                    <p>{{ application.job_title }}</p>
+                    <span>{{ application.location }}</span>
+                </div>
+
+                <div>
+                    <span class="status-badge">
+                        {{ application.status }}
+                    </span>
+                    <p>{{ application.date_applied }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <div class="empty-icon">▤</div>
+        <h3>No applications yet</h3>
+        <p>Start tracking your job search by adding your first application.</p>
+        <a href="/add" class="add-button">
+            + Add Your First Application
+        </a>
+    </div>
+{% endif %}
+
+        </section>
+
+
+
+<!-- UPCOMING INTERVIEWS -->
+<section class="applications-section">
+    <div class="section-heading">
+        <div>
+            <h2>Upcoming Interviews</h2>
+            <p>Your next scheduled interviews.</p>
+        </div>
+    </div>
+
+    {% if upcoming_interviews %}
+        <div class="application-list">
+            {% for interview in upcoming_interviews %}
+                <div class="application-row">
+                    <div>
+                        <h3>{{ interview.company }}</h3>
+                        <p>{{ interview.job_title }}</p>
+                        <span>{{ interview.interview_date }}</span>
+                    </div>
+                    <div>
+                        <span class="status-badge">
+                            {{ interview.interview_time or "Time not set" }}
+                        </span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>No Upcoming Interviews</h3>
+            <p>Your scheduled interviews will appear here.</p>
+        </div>
+    {% endif %}
+
+<!-- UPCOMING REMINDERS -->
+<section class="applications-section">
+    <div class="section-heading">
+        <div>
+            <h2>Upcoming Reminders</h2>
+            <p>Stay on top of your job search tasks.</p>
+        </div>
+    </div>
+
+    {% if upcoming_reminders %}
+        <div class="application-list">
+            {% for reminder in upcoming_reminders %}
+                <div class="application-row">
+                    <div>
+                        <h3>{{ reminder.title }}</h3>
+                        <p>Due: {{ reminder.reminder_date }}</p>
+                    </div>
+                    <div>
+                        <span class="status-badge">Pending</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>No Upcoming Reminders</h3>
+            <p>Your upcoming reminders will appear here.</p>
+        </div>
+    {% endif %}
+</section>
+
+
+<!-- APPLICATION ACTIVITY TIMELINE -->
+<section class="applications-section">
+    <div class="section-heading">
+        <div>
+            <h2>Application Activity Timeline</h2>
+            <p>See everything happening in your job search.</p>
+        </div>
+    </div>
+
+    {% if activity_timeline %}
+        <div class="activity-timeline">
+            {% for activity in activity_timeline %}
+                <div class="activity-item">
+                    <div class="activity-marker"></div>
+
+                    <div class="activity-content">
+                        <h3>{{ activity.activity_type }}</h3>
+                        <h4>{{ activity.company }}</h4>
+                        <p>{{ activity.job_title }}</p>
+                        <span>{{ activity.details }}</span>
+                        <small>{{ activity.activity_date }}</small>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>No Activity Yet</h3>
+            <p>Your job search activity will appear here.</p>
+        </div>
+    {% endif %}
+</section>
+
+
+
+<section class="applications-section">
+    <div class="section-heading">
+        <div>
+            <h2>Quick Actions</h2>
+            <p>Manage your job search efficiently.</p>
+        </div>
+    </div>
+
+    <div class="quick-actions">
+        <a href="/add" class="add-button">+ Add Application</a>
+        <a href="/add-interview" class="add-button">+ Schedule Interview</a>
+        <a href="/add-reminder" class="add-button">+ Create Reminder</a>
+    </div>
+</section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

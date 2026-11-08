@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobTrack | Add Interview</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="app-container">
+
+    <aside class="sidebar">
+        <div class="logo">Job<span>Track</span></div>
+        <p class="menu-label">MENU</p>
+
+        <nav>
+            <a href="/" class="nav-link">▦ Dashboard</a>
+            <a href="/applications" class="nav-link">▣ Applications</a>
+            <a href="/interviews" class="nav-link active">▣ Interviews</a>
+            <a href="#" class="nav-link">◷ Reminders</a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="#" class="nav-link">⚙ Settings</a>
+            <p>JobTrack v1.0</p>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1>Add Interview</h1>
+                <p>Keep track of your upcoming interview opportunities.</p>
+            </div>
+        </header>
+
+        <section class="applications-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Interview Details</h2>
+                    <p>Enter your interview information below.</p>
+                </div>
+            </div>
+
+            <form action="/add_interview" method="POST" class="form-container">
+
+                <label for="company">Company Name</label>
+                <input type="text" id="company" name="company"
+                       placeholder="Enter company name" required>
+
+                <label for="job_title">Job Title</label>
+                <input type="text" id="job_title" name="job_title"
+                       placeholder="Enter job title" required>
+
+                <label for="interview_date">Interview Date</label>
+                <input type="date" id="interview_date" name="interview_date"
+                       required>
+
+                <label for="interview_time">Interview Time</label>
+                <input type="time" id="interview_time" name="interview_time">
+
+                <label for="location">Interview Location</label>
+                <input type="text" id="location" name="location"
+                       placeholder="Enter interview location">
+
+                <label for="notes">Notes</label>
+                <textarea id="notes" name="notes"
+                          placeholder="Add interview preparation notes"></textarea>
+
+                <label for="follow_up_date">Follow-Up Date</label>
+                <input type="date" id="follow_up_date" name="follow_up_date">
+
+                <div class="form-actions">
+                    <button type="submit" class="add-button">
+                        Save Interview
+                    </button>
+
+                    <a href="/interviews" class="view-button">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+</div>
+
+</body>
+</html>

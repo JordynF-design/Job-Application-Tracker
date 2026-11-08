@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobTrack | Applications</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="app-container">
+
+    <aside class="sidebar">
+        <div class="logo">Job<span>Track</span></div>
+        <p class="menu-label">MENU</p>
+
+       <nav>
+    <a href="/" class="nav-link">▦ Dashboard</a>
+    <a href="/applications" class="nav-link active">▤ Applications</a>
+    <a href="/interviews" class="nav-link">Interviews</a>
+    <a href="/reminders" class="nav-link">Reminders</a>
+</nav>
+
+        <div class="sidebar-bottom">
+            <a href="#" class="nav-link">⚙ Settings</a>
+            <p>JobTrack v1.0</p>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1>My Applications</h1>
+                <p>Manage and track all your job applications.</p>
+            </div>
+
+            <a href="/add" class="add-button">+ Add Application</a>
+        </header>
+
+        <section class="applications-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>All Applications</h2>
+                    <p>Your complete job application history.</p>
+                </div>
+
+
+
+<div class="search-filter">
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="Search by company name..."
+    >
+
+    <select id="statusFilter">
+        <option value="All">All Statuses</option>
+        <option value="Applied">Applied</option>
+        <option value="Interview">Interview</option>
+        <option value="Offer">Offer</option>
+        <option value="Rejected">Rejected</option>
+    </select>
+</div>
+
+
+
+
+            </div>
+
+            {% if applications %}
+
+            <div class="application-list">
+
+                {% for application in applications %}
+
+                <div class="application-row">
+
+                    <div>
+                        <h3>{{ application.company }}</h3>
+                        <p>{{ application.job_title }}</p>
+                        <span>{{ application.location or "Location not provided" }}</span>
+                    </div>
+
+                    <div>
+                        <form method="POST"
+      action="{{ url_for('update_application', application_id=application.id) }}">
+
+    <select name="status"
+            class="status-badge"
+            onchange="this.form.submit()">
+
+        <option value="Applied" {% if application.status == "Applied" %}selected{% endif %}>Applied</option>
+
+        <option value="Interview" {% if application.status == "Interview" %}selected{% endif %}>Interview</option>
+
+        <option value="Offer" {% if application.status == "Offer" %}selected{% endif %}>Offer</option>
+
+        <option value="Rejected" {% if application.status == "Rejected" %}selected{% endif %}>Rejected</option>
+
+    </select>
+</form>
+                        <p>{{ application.date_applied }}</p>
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+                <div class="empty-icon">▤</div>
+                <h3>No applications found</h3>
+                <p>Start tracking your job search by adding your first application.</p>
+                <a href="/add" class="add-button">+ Add Your First Application</a>
+            </div>
+
+            {% endif %}
+
+
+
+<!-- APPLICATION RESPONSE HISTORY -->
+<section class="history-section">
+    <div class="section-header">
+        <div>
+            <h2>Application Response History</h2>
+            <p>Track every status change in your job search.</p>
+        </div>
+    </div>
+
+    {% if application_history %}
+        <div class="history-list">
+            {% for history in application_history %}
+                <div class="history-item">
+                    <div class="history-info">
+                        <h3>{{ history.company }}</h3>
+                        <p>{{ history.job_title }}</p>
+                        <span class="history-status">
+                            Status updated to: {{ history.status }}
+                        </span>
+                    </div>
+
+                    <div class="history-date">
+                        {{ history.changed_at }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-history">
+            <p>No application status changes recorded yet.</p>
+        </div>
+    {% endif %}
+</section>
+
+
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+
+<script>
+const searchInput = document.getElementById("searchInput");
+const statusFilter = document.getElementById("statusFilter");
+const applicationRows = document.querySelectorAll(".application-row");
+
+function filterApplications() {
+    const searchText = searchInput.value.toLowerCase();
+    const selectedStatus = statusFilter.value;
+
+    applicationRows.forEach(row => {
+        const company = row.textContent.toLowerCase();
+        const status = row.querySelector(".status-badge").textContent.trim();
+
+        const matchesSearch = company.includes(searchText);
+        const matchesStatus =
+            selectedStatus === "All" || status === selectedStatus;
+
+        row.style.display =
+            matchesSearch && matchesStatus ? "" : "none";
+    });
+}
+
+searchInput.addEventListener("input", filterApplications);
+statusFilter.addEventListener("change", filterApplications);
+</script>
+
+
+
+</body>
+
+
+</html>
